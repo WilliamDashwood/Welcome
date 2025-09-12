@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>倒计时 — 2025-11-23</title>
+  <style>
+    :root{
+      --bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --text: #111;
+      --muted: #666;
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      background:var(--bg);
+      font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      color:var(--text);
+    }
+
+    /* Centering container */
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+      box-sizing:border-box;
+    }
+
+    .card{
+      background:var(--card-bg);
+      padding:36px 48px;
+      border-radius:12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      text-align:center;
+      max-width:920px;
+      width:100%;
+    }
+
+    .label{
+      font-size:14px;
+      color:var(--muted);
+      margin-bottom:10px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+    }
+
+    .countdown{
+      font-family: "Roboto Mono", "Courier New", Courier, monospace;
+      font-size:64px;
+      line-height:1;
+      letter-spacing:0.02em;
+      color:var(--text);
+      display:inline-block;
+      padding:10px 18px;
+      border-radius:8px;
+      background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
+      min-width:420px;
+    }
+
+    /* small screens */
+    @media (max-width:520px){
+      .card{ padding:20px; }
+      .countdown{ font-size:36px; min-width:unset; width:100%; display:block; }
+    }
+
+    .note{
+      margin-top:12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="region" aria-label="倒计时到 2025 年 11 月 23 日">
+      <div class="label">距离 2025-11-23 的倒计时</div>
+      <div id="countdown" class="countdown" aria-live="polite">--:--:--:--</div>
+      <div class="note">格式：day:hour:minute:second （以本地时区显示）</div>
+    </div>
+  </div>
+
+  <script>
+    // 目标时间：2025-11-23 00:00:00 JST (UTC+09:00)
+    const targetIso = '2025-11-23T00:00:00+09:00';
+    const target = new Date(targetIso);
+
+    const el = document.getElementById('countdown');
+
+    function pad(n, width=2){
+      const s = String(n);
+      return s.length >= width ? s : '0'.repeat(width - s.length) + s;
+    }
+
+    function update(){
+      const now = new Date();
+      let diff = target.getTime() - now.getTime();
+
+      if (diff <= 0){
+        el.textContent = "0:00:00:00";
+        return;
+      }
+
+      const secTotal = Math.floor(diff / 1000);
+      const days = Math.floor(secTotal / (24*3600));
+      const hours = Math.floor((secTotal % (24*3600)) / 3600);
+      const mins = Math.floor((secTotal % 3600) / 60);
+      const secs = secTotal % 60;
+
+      const text = `${days}:${pad(hours)}:${pad(mins)}:${pad(secs)}`;
+      el.textContent = text;
+    }
+
+    update();
+    const timer = setInterval(update, 1000);
+    window.addEventListener('pagehide', ()=> clearInterval(timer), {passive:true});
+  </script>
+</body>
+</html>
