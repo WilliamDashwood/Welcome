@@ -80,25 +80,25 @@
       bottom: 24px;
     }
 
-    @keyframes blink {
-       0% {
-         opacity: 1;
-        }
-       50% {
-         opacity: 0;
-        }
-       100% {
-         opacity: 1;
-        }
-      }
+    
 
     .triangle {
       position:absolute;
       left: 50%;
       transform: translateX(-50%);
       max-width: 100%；
-      animation: blink 1s infinite;
+      
     }
+
+    .blinking-triangle {
+       animation: blink 0.5s ease-in-out; /* 闪烁动画，可以调整速度 */
+}
+
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+      }
     
     @media (min-width: 768px) {
       .title {
@@ -182,21 +182,34 @@
       return s.length >= width ? s : '0'.repeat(width - s.length) + s;
     }
 
-    function update(){
-      const now = new Date();
-      let diff = target.getTime() - now.getTime();
-      if (diff <= 0){
-        el.textContent = "0:00:00:00";
-        document.querySelector('.message').textContent = "目标已达成！";
-        return;
-      }
-      const secTotal = Math.floor(diff / 1000);
-      const days = Math.floor(secTotal / (24*3600));
-      const hours = Math.floor((secTotal % (24*3600)) / 3600);
-      const mins = Math.floor((secTotal % 3600) / 60);
-      const secs = secTotal % 60;
-      el.textContent = `${days}:${pad(hours)}:${pad(mins)}:${pad(secs)}`;
+   
+
+  function update(){
+    const now = new Date();
+    let diff = target.getTime() - now.getTime();
+    if (diff <= 0){
+      el.textContent = "0:00:00:00";
+      document.querySelector('.message').textContent = "目标已达成！";
+      return;
     }
+    const secTotal = Math.floor(diff / 1000);
+    const days = Math.floor(secTotal / (24*3600));
+    const hours = Math.floor((secTotal % (24*3600)) / 3600);
+    const mins = Math.floor((secTotal % 3600) / 60);
+    const secs = secTotal % 60;
+    el.textContent = `${days}:${pad(hours)}:${pad(mins)}:${pad(secs)}`;
+  
+    // 获取红色三角形元素
+    const triangleEl = document.querySelector('.triangle');
+  
+    // 每秒触发闪烁效果
+    triangleEl.classList.add('blinking-triangle');
+    setTimeout(() => {
+      triangleEl.classList.remove('blinking-triangle');
+    }, 500); // 这里的 500 毫秒与 CSS 中的动画时间一致
+  }
+
+
 
     update();
     const timer = setInterval(update, 1000);
