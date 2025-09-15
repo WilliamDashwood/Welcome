@@ -15,6 +15,7 @@
       flex-direction: column; /* Stack children vertically */
       justify-content: center; /* Center content vertically */
       align-items: center; /* Center content horizontally */
+      
     }
 
     .header {
@@ -48,14 +49,16 @@
       color: #111;
       padding: 5vw;
       border-radius: 12px;
-      background: #fff;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      background: #ffffff00;
+      
       max-width: 90%;
       box-sizing: border-box;
       word-break: break-word;
       white-space: nowrap;
       overflow: hidden;
       margin: 0 20px;
+      position: fixed;
+      bottom: 35px;
     }
 
     .message {
@@ -63,6 +66,8 @@
       color: #444;
       margin-top: 15px;
       text-align: center;
+      position: fixed;
+      bottom: 24px;
     }
 
     @media (min-width: 768px) {
