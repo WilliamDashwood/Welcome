@@ -56,6 +56,7 @@
       left: 50%;
       transform: translateX(-50%);
       max-width: 100%；
+      animation: blink 1s infinite;
     }
       
 
@@ -87,6 +88,18 @@
       bottom: 24px;
     }
 
+    @keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+    
     @media (min-width: 768px) {
       .title {
         font-size: 36px;
