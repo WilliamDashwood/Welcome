@@ -91,7 +91,7 @@
     }
 
     .blinking-triangle {
-       animation: blink 1s ease-in-out; /* 闪烁动画，可以调整速度 */
+       animation: blink 2s ease-in-out; /* 闪烁动画，可以调整速度 */
 }
 
     @keyframes blink {
@@ -206,7 +206,7 @@
     triangleEl.classList.add('blinking-triangle');
     setTimeout(() => {
       triangleEl.classList.remove('blinking-triangle');
-    }, 1000); // 这里的 500 毫秒与 CSS 中的动画时间一致
+    }, 2000); // 这里的 2000 毫秒与 CSS 中的动画时间一致
   }
 
 
