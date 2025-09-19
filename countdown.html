@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>倒计时</title>
+  <link rel="icon" href="/Welcome/favicon.svg" type="image/svg+xml">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #f5f5f5;
+      font-family: "Roboto Mono", "Courier New","Microsoft YaHei", Courier, monospace , "微软雅黑", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      display: flex; /* Use flexbox for the body */
+      flex-direction: column; /* Stack children vertically */
+      justify-content: center; /* Center content vertically */
+      align-items: center; /* Center content horizontally */
+      
+    }
+
+    .header {
+      /* The header no longer needs to grow */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px; /* Add some space below the header */
+    }
+
+    .title {
+      font-size: 6vw;
+      color: #333;
+      text-align: center;
+      
+    }
+
+    .subtitle {
+      font-size: 4vw;
+      color: #666;
+      max-width: 80%;
+      margin: 0; /* Remove default margins */
+    }
+
+   .img {
+     position: absolute;
+     top: 20%;
+     left: 50%;
+     transform: translateX(-50%);
+     max-width: 100%;
+    }
+    
+    
+    .countdown {
+      font-size: 9vw;
+      line-height: 1.2;
+      text-align: center;
+      color: #111;
+      padding: 5vw;
+      border-radius: 12px;
+      background: #ffffff00;
+      
+      max-width: 90%;
+      box-sizing: border-box;
+      word-break: break-word;
+      white-space: nowrap;
+      overflow: hidden;
+      margin: 0 20px;
+      position: fixed;
+      bottom: 35px;
+    }
+
+    .message {
+      font-size: 4vw;
+      color: #444;
+      margin-top: 15px;
+      text-align: center;
+      position: fixed;
+      bottom: 24px;
+    }
+
+    
+
+    .triangle {
+      position:absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 100%；
+      
+    }
+
+    .blinking-triangle {
+       animation: blink 2s ease-in-out; /* 闪烁动画，可以调整速度 */
+}
+
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    
+    @media (min-width: 768px) {
+      .title {
+        font-size: 36px;
+        position: fixed;
+        bottom: 250px;
+      }
+      
+      .subtitle {
+        font-size: 24px;
+      }
+      
+      .countdown {
+        font-size: 60px;
+        padding: 30px 40px;
+      }
+      
+      .message {
+        font-size: 22px;
+      }
+
+      .img {
+        width:20%;
+        height:auto;
+      } 
+
+      .triangle {
+        position: fixed;
+        bottom: 23%;
+        width:2%;
+        height:auto;
+      }
+    }
+
+    
+
+    
+
+    @media (max-width: 480px) {
+      .countdown {
+        font-size: 8vw;
+        padding: 6vw;
+      }
+      
+      .img {
+        width:50%;
+        height:auto;
+      }
+
+       .triangle {
+         position: fixed;
+         bottom: 45%;        
+         width:10%;
+        height:auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+
+  <a href="/Welcome/Sense and Sensibility(Simplified Chinese).epub" download="Sense and Sensibility(Simplified Chinese).epub">
+  <img src="/Welcome/book.svg" alt="示例图片" class="img">
+</a>
+  <div class="header">
+    <div class="title">点击图片下载中文版电子书</div>
+    <img src="/Welcome/red triangle.png" alt="0" class="triangle">
+    <div class="subtitle"></div>
+  </div>
+  <div id="countdown" class="countdown">70:09:33:03</div>
+  
+  <div class="message">到时候再回来看看吧</div>
+
+  <script>
+    const targetIso = '2025-11-23T00:00:00+09:00';
+    const target = new Date(targetIso);
+    const el = document.getElementById('countdown');
+
+    function pad(n, width=2){
+      const s = String(n);
+      return s.length >= width ? s : '0'.repeat(width - s.length) + s;
+    }
+
+   
+
+  function update(){
+    const now = new Date();
+    let diff = target.getTime() - now.getTime();
+    if (diff <= 0){
+      el.textContent = "0:00:00:00";
+      document.querySelector('.message').textContent = "目标已达成！";
+      clearInterval(timer);
+      window.location.href = "https://example.com";
+      return;
+    }
+    const secTotal = Math.floor(diff / 1000);
+    const days = Math.floor(secTotal / (24*3600));
+    const hours = Math.floor((secTotal % (24*3600)) / 3600);
+    const mins = Math.floor((secTotal % 3600) / 60);
+    const secs = secTotal % 60;
+    el.textContent = `${days}:${pad(hours)}:${pad(mins)}:${pad(secs)}`;
+  
+    // 获取红色三角形元素
+    const triangleEl = document.querySelector('.triangle');
+  
+    // 每秒触发闪烁效果
+    triangleEl.classList.add('blinking-triangle');
+    setTimeout(() => {
+      triangleEl.classList.remove('blinking-triangle');
+    }, 2000); // 这里的 2000 毫秒与 CSS 中的动画时间一致
+  }
+
+
+
+    update();
+    const timer = setInterval(update, 1000);
+    window.addEventListener('pagehide', ()=> clearInterval(timer), {passive:true});
+  </script>
+</body>
+</html>
