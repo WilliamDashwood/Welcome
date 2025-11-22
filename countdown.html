@@ -1,221 +1,226 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>倒计时</title>
-  <link rel="icon" href="/Welcome/favicon.svg" type="image/svg+xml">
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      background: #f5f5f5;
-      font-family: "Roboto Mono", "Courier New","Microsoft YaHei", Courier, monospace , "微软雅黑", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      display: flex; /* Use flexbox for the body */
-      flex-direction: column; /* Stack children vertically */
-      justify-content: center; /* Center content vertically */
-      align-items: center; /* Center content horizontally */
-      
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epilogue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FDFBF7; /* Creamy paper background */
+            color: #2C3E50;
+            font-family: 'Cormorant Garamond', serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden; /* Important for containing the falling particles */
+            padding: 20px;
+            position: relative;
+        }
 
-    .header {
-      /* The header no longer needs to grow */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 20px; /* Add some space below the header */
-    }
+        /* --- The Wax Seal (Initial State) --- */
+        .wax-seal-container {
+            display: block;
+            animation: pulse 3s infinite ease-in-out;
+            z-index: 10; /* Ensure it's above everything else initially */
+        }
 
-    .title {
-      font-size: 6vw;
-      color: #333;
-      text-align: center;
-      
-    }
+        .wax-seal {
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle at 30% 30%, #C0392B, #922B21); /* Richer gradient */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5D1009;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: bold;
+            font-size: 1.4rem;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3), inset 0 2px 5px rgba(255,255,255,0.2);
+            border: 4px double #7B241C;
+        }
 
-    .subtitle {
-      font-size: 4vw;
-      color: #666;
-      max-width: 80%;
-      margin: 0; /* Remove default margins */
-    }
+        .tap-text {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #888;
+            font-weight: 500;
+        }
 
-   .img {
-     position: absolute;
-     top: 20%;
-     left: 50%;
-     transform: translateX(-50%);
-     max-width: 100%;
-    }
-    
-    
-    .countdown {
-      font-size: 9vw;
-      line-height: 1.2;
-      text-align: center;
-      color: #111;
-      padding: 5vw;
-      border-radius: 12px;
-      background: #ffffff00;
-      
-      max-width: 90%;
-      box-sizing: border-box;
-      word-break: break-word;
-      white-space: nowrap;
-      overflow: hidden;
-      margin: 0 20px;
-      position: fixed;
-      bottom: 35px;
-    }
+        /* --- The Hidden Content --- */
+        .hidden-content {
+            display: none;
+            opacity: 0;
+            max-width: 600px;
+            z-index: 5; /* Text sits above the falling particles */
+            position: relative;
+        }
 
-    .message {
-      font-size: 4vw;
-      color: #444;
-      margin-top: 15px;
-      text-align: center;
-      position: fixed;
-      bottom: 24px;
-    }
+        /* The Script Quote */
+        .quote {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 3.2rem;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
 
-    
+        /* The Blessing */
+        .blessing {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 45px;
+        }
 
-    .triangle {
-      position:absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 100%；
-      
-    }
+        /* The Signature */
+        .signature {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #999;
+            border-top: 1px solid #e0e0e0;
+            display: inline-block;
+            padding-top: 25px;
+        }
 
-    .blinking-triangle {
-       animation: blink 2s ease-in-out; /* 闪烁动画，可以调整速度 */
-}
+        /* --- The Gold Dust Particles --- */
+        .particle {
+            position: fixed;
+            top: -10px;
+            background: #D4AF37; /* Antique Gold color */
+            border-radius: 50%;
+            box-shadow: 0 0 6px #D4AF37; /* Subtle glow */
+            pointer-events: none; /* Ensures they don't interfere with clicks */
+            z-index: 1; /* Behind the text */
+        }
 
-    @keyframes blink {
-        0% { opacity: 1; }
-        50% { opacity: 0; }
-        100% { opacity: 1; }
-      }
-    
-    @media (min-width: 768px) {
-      .title {
-        font-size: 36px;
-        position: fixed;
-        bottom: 250px;
-      }
-      
-      .subtitle {
-        font-size: 24px;
-      }
-      
-      .countdown {
-        font-size: 60px;
-        padding: 30px 40px;
-      }
-      
-      .message {
-        font-size: 22px;
-      }
+        /* --- Animations --- */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
 
-      .img {
-        width:20%;
-        height:auto;
-      } 
+        @keyframes revealText {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-      .triangle {
-        position: fixed;
-        bottom: 23%;
-        width:2%;
-        height:auto;
-      }
-    }
-
-    
-
-    
-
-    @media (max-width: 480px) {
-      .countdown {
-        font-size: 8vw;
-        padding: 6vw;
-      }
-      
-      .img {
-        width:50%;
-        height:auto;
-      }
-
-       .triangle {
-         position: fixed;
-         bottom: 45%;        
-         width:10%;
-        height:auto;
-      }
-    }
-  </style>
+        /* Animation for falling dust */
+        @keyframes fall-and-drift {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            100% {
+                /* Fall down to 110vh and drift sideways randomly */
+                transform: translateY(110vh) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
-<body>
-  
+<body onclick="revealMessage()">
 
-  <a href="/Welcome/Sense and Sensibility(Simplified Chinese).epub" download="Sense and Sensibility(Simplified Chinese).epub">
-  <img src="/Welcome/book.svg" alt="示例图片" class="img">
-</a>
-  <div class="header">
-    <div class="title">点击图片下载中文版电子书</div>
-    <img src="/Welcome/red triangle.png" alt="0" class="triangle">
-    <div class="subtitle"></div>
-  </div>
-  <div id="countdown" class="countdown">70:09:33:03</div>
-  
-  <div class="message">到时候再回来看看吧</div>
+    <div class="wax-seal-container" id="seal">
+        <div class="wax-seal">Z</div>
+        <div class="tap-text">Tap to Open</div>
+    </div>
 
-  <script>
-    const targetIso = '2025-11-23T00:00:00+09:00';
-    const target = new Date(targetIso);
-    const el = document.getElementById('countdown');
+    <div class="hidden-content" id="message">
+        
+        <div class="quote">
+            "It is not what we think or feel that make us happy, but what we do."
+        </div>
 
-    function pad(n, width=2){
-      const s = String(n);
-      return s.length >= width ? s : '0'.repeat(width - s.length) + s;
-    }
+        <div class="blessing">
+            Wishing you every happiness, today and always.
+        </div>
 
-   
+        <div class="signature">
+            Happy Birthday | &nbsp -W
+        </div>
+    </div>
 
-  function update(){
-    const now = new Date();
-    let diff = target.getTime() - now.getTime();
-    if (diff <= 0){
-      el.textContent = "0:00:00:00";
-      document.querySelector('.message').textContent = "目标已达成！";
-      clearInterval(timer);
-      window.location.href = "https://www.formula1.com";
-      return;
-    }
-    const secTotal = Math.floor(diff / 1000);
-    const days = Math.floor(secTotal / (24*3600));
-    const hours = Math.floor((secTotal % (24*3600)) / 3600);
-    const mins = Math.floor((secTotal % 3600) / 60);
-    const secs = secTotal % 60;
-    el.textContent = `${days}:${pad(hours)}:${pad(mins)}:${pad(secs)}`;
-  
-    // 获取红色三角形元素
-    const triangleEl = document.querySelector('.triangle');
-  
-    // 每秒触发闪烁效果
-    triangleEl.classList.add('blinking-triangle');
-    setTimeout(() => {
-      triangleEl.classList.remove('blinking-triangle');
-    }, 2000); // 这里的 2000 毫秒与 CSS 中的动画时间一致
-  }
+    <script>
+        let isRevealed = false;
 
+        function revealMessage() {
+            if (isRevealed) return; // Prevents double-clicking
+            isRevealed = true;
 
+            const seal = document.getElementById('seal');
+            const message = document.getElementById('message');
 
-    update();
-    const timer = setInterval(update, 1000);
-    window.addEventListener('pagehide', ()=> clearInterval(timer), {passive:true});
-  </script>
+            // 1. Hide the seal immediately
+            seal.style.display = 'none';
+
+            // 2. Show the message with a smooth reveal animation
+            message.style.display = 'block';
+            // Small timeout to ensure the display:block is rendered before animating
+            setTimeout(() => {
+                message.style.animation = "revealText 3s cubic-bezier(0.25, 1, 0.5, 1) forwards";
+            }, 20);
+
+            // 3. Trigger the Gold Dust Animation
+            createGoldDust();
+        }
+
+        function createGoldDust() {
+            const particleCount = 50; // Number of particles
+            const body = document.body;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+
+                // Randomize size (small and delicate)
+                const size = Math.random() * 4 + 2 + 'px'; // between 2px and 6px
+                particle.style.width = size;
+                particle.style.height = size;
+
+                // Randomize horizontal starting position
+                particle.style.left = Math.random() * 100 + 'vw';
+
+                // Randomize falling speed (between 3s and 8s)
+                const duration = Math.random() * 5 + 3 + 's';
+                particle.style.animationDuration = duration;
+
+                // Randomize delay so they don't all start at once
+                particle.style.animationDelay = Math.random() * 2 + 's';
+
+                // Randomize horizontal drift amount for natural movement
+                const drift = (Math.random() - 0.5) * 200 + 'px';
+                particle.style.setProperty('--drift', drift);
+
+                // Set the animation
+                particle.style.animationName = 'fall-and-drift';
+                particle.style.animationTimingFunction = 'linear';
+                particle.style.animationIterationCount = '1'; // They fall once then disappear
+
+                body.appendChild(particle);
+
+                // Remove particle from DOM after animation ends to keep things clean
+                setTimeout(() => {
+                    particle.remove();
+                }, parseFloat(duration) * 1000 + 2000);
+            }
+        }
+    </script>
+
 </body>
 </html>
